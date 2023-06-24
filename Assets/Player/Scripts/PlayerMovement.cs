@@ -7,44 +7,42 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private LayerMask _gapLayer;
 	[SerializeField] private LayerMask _wallLayer;
 
-	private Vector2 _movementInput;
-	private float _raycastDistance;
+	private const string HorizontalAxis = "Horizontal";
+	private const string VerticalAxis = "Vertical";
+
+	private float _radius;
 
 	private void Awake()
 	{
-		_raycastDistance = transform.localScale.x / 2;
+		_radius = transform.localScale.x / 2;
 	}
 
 	private void Update()
 	{
-		_movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
-
-		Vector2 newPosition = transform.position;
-
-		Vector2 horizontalCheck = Vector2.right * _movementInput.x;
-
-		if (IsGapInDirection(horizontalCheck) == false && IsWallInDirection(horizontalCheck) == false)
-		{
-			newPosition.x += _movementInput.x * _speed * Time.deltaTime;
-		}
-
-		Vector2 verticalCheck = Vector2.up * _movementInput.y;
-
-		if (IsGapInDirection(verticalCheck) == false && IsWallInDirection(verticalCheck) == false)
-		{
-			newPosition.y += _movementInput.y * _speed * Time.deltaTime;
-		}
-
-		transform.position = newPosition;
+		ProcessMovement();
 	}
 
-	private bool IsGapInDirection(Vector2 direction)
+	private void ProcessMovement()
 	{
-		return Physics2D.Raycast(transform.position, direction, _raycastDistance, _gapLayer);
+		Vector2 movementInput = new Vector2(Input.GetAxisRaw(HorizontalAxis), Input.GetAxisRaw(VerticalAxis)).normalized;
+
+		MoveInDirection(Vector2.right * movementInput.x);
+		MoveInDirection(Vector2.up * movementInput.y);
 	}
 
-	private bool IsWallInDirection(Vector2 direction)
+	private void MoveInDirection(Vector2 direction)
 	{
-		return Physics2D.Raycast(transform.position, direction, _raycastDistance, _wallLayer);
+		Vector2 movement = _speed * Time.deltaTime * direction;
+
+		if (!IsObstacleInDirection(direction, movement.magnitude))
+		{
+			transform.position += (Vector3)movement;
+		}
+	}
+
+	private bool IsObstacleInDirection(Vector2 direction, float distance)
+	{
+		return Physics2D.CircleCast(transform.position, _radius, direction, distance, _gapLayer) ||
+			   Physics2D.CircleCast(transform.position, _radius, direction, distance, _wallLayer);
 	}
 }
