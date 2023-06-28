@@ -1,5 +1,11 @@
 public enum InteractType
 {
+	Non,
 	Destroy,
-	Reflection
+	Reflection,
+	Prism,
+	ChangeToFire,
+	ChangeToWater,
+	ChangeToEarth,
+	ChangeToAir
 }

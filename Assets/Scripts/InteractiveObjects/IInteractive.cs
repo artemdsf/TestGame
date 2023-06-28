@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using static InteractiveObject;
+
 public interface IInteractive
 {
-	public InteractType? Interact(InteractElement element);
+	public List<InteractType> Interact(InteractElement element, bool isEntrance);
 }

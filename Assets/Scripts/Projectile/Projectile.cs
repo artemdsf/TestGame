@@ -1,19 +1,25 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static InteractiveObject;
 
 public class Projectile : MonoBehaviour
 {
 	[Header("Projectile Parameters")]
-	[SerializeField] private float _speed = 10f;
-	[SerializeField] private LayerMask _wallLayer;
+	[SerializeField] private float _speed;
 	[SerializeField] private LayerMask _interactiveLayer;
 
+	public List<IInteractive> LastInteractiveObjects = new();
+	public List<IInteractive> CurrentInteractiveObjects = new();
+
+	private GameObject _projectilePrefab;
 	private InteractElement _interactElement = InteractElement.Fire;
 	private Vector2 _currentDirection;
 	private float _radius;
 
 	public Vector2 InitialDirection
 	{
-		set { _currentDirection = value.normalized; }
+		set { _currentDirection = value; }
 	}
 
 	public float Speed
@@ -23,70 +29,141 @@ public class Projectile : MonoBehaviour
 
 	private void Awake()
 	{
+		_projectilePrefab = gameObject;
 		_radius = transform.localScale.x / 2;
 	}
 
 	private void Update()
 	{
 		ProcessMovement();
+		LastInteractiveObjects = CurrentInteractiveObjects.ToList();
+		CurrentInteractiveObjects.Clear();
 	}
 
 	private void ProcessMovement()
 	{
-		Vector2 movement = _speed * Time.deltaTime * _currentDirection;
-
-		if (IsObstacleInDirection(Vector2.right * _currentDirection.x, Mathf.Abs(movement.x)) ||
-			CheckAndHandleInteractiveCollision(Vector2.right * _currentDirection.x))
-		{
-			_currentDirection.x = -_currentDirection.x;
-		}
-
-		if (IsObstacleInDirection(Vector2.up * _currentDirection.y, Mathf.Abs(movement.y)) ||
-			CheckAndHandleInteractiveCollision(Vector2.up * _currentDirection.y))
-		{
-			_currentDirection.y = -_currentDirection.y;
-		}
-
-		transform.position = (Vector2)transform.position + _currentDirection * _speed * Time.deltaTime;
+		MoveInDirection(Vector2.right, ref _currentDirection.x);
+		MoveInDirection(Vector2.up, ref _currentDirection.y);
 	}
 
-	private bool CheckAndHandleInteractiveCollision(Vector2 direction)
+	private void MoveInDirection(Vector2 direction, ref float projection)
 	{
-		IInteractive interactiveObject = GetCollidingInteractiveObject(direction);
+		float distance = _speed * projection * Time.deltaTime;
+		HandleInteractiveCollision(direction, distance, out bool isReflection);
 
-		if (interactiveObject != null)
+		if (isReflection)
 		{
-			InteractType? interactType = interactiveObject.Interact(_interactElement);
+			projection *= -1;
+			distance *= -1;
+		}
 
-			switch (interactType)
+		transform.position += (Vector3)(distance * direction);
+	}
+
+	private void HandleInteractiveCollision(Vector2 direction, float distance, out bool isReflection)
+	{
+		List<InteractiveObjectInfo> interactiveObjects = GetInfoAboutCollidingObjects(direction, distance);
+		
+		isReflection = false;
+
+		if (interactiveObjects != null)
+		{
+			foreach (InteractiveObjectInfo item in interactiveObjects)
 			{
-				case InteractType.Destroy:
-					Destroy(gameObject);
-					return true;
+				List<InteractType> interactTypes = item.Object.Interact(_interactElement, item.IsEntrance);
 
-				case InteractType.Reflection:
-					return true;
+				if (interactTypes.Count > 0)
+				{
+					foreach (InteractType interactType in interactTypes)
+					{
+						switch (interactType)
+						{
+							case InteractType.Destroy:
+								Destroy(gameObject);
+								break;
+
+							case InteractType.Reflection:
+								isReflection = true;
+								break;
+
+							case InteractType.Prism:
+								ActivePrismEffect();
+								isReflection = true;
+								break;
+
+							case InteractType.ChangeToFire:
+								Debug.Log("Change to fire");
+								_interactElement = InteractElement.Fire;
+								break;
+
+							case InteractType.ChangeToWater:
+								Debug.Log("Change to water");
+								_interactElement = InteractElement.Water;
+								break;
+
+							case InteractType.ChangeToEarth:
+								Debug.Log("Change to earth");
+								_interactElement = InteractElement.Earth;
+								break;
+
+							case InteractType.ChangeToAir:
+								Debug.Log("Change to air");
+								_interactElement = InteractElement.Air;
+								break;
+						}
+					}
+				}
 			}
 		}
-
-		return false;
 	}
 
-	private bool IsObstacleInDirection(Vector2 direction, float distance)
+	private void ActivePrismEffect()
 	{
-		return Physics2D.CircleCast(transform.position, _radius, direction, distance, _wallLayer);
+		GameObject projectile = Instantiate(_projectilePrefab, transform.position, Quaternion.identity);
+		Projectile projectileScript = projectile.GetComponent<Projectile>();
+
+		projectileScript.CurrentInteractiveObjects = CurrentInteractiveObjects.ToList();
+		projectileScript.LastInteractiveObjects = CurrentInteractiveObjects.ToList();
+		projectileScript.InitialDirection = _currentDirection;
+		projectileScript.Speed = _speed;
 	}
 
-	private IInteractive GetCollidingInteractiveObject(Vector2 direction)
+	private List<InteractiveObjectInfo> GetInfoAboutCollidingObjects(Vector2 direction, float distance)
 	{
-		RaycastHit2D hit2D = Physics2D.Raycast(transform.position, direction, _radius, _interactiveLayer);
+		List<InteractiveObjectInfo> objects = new();
+		RaycastHit2D[] hits2D = Physics2D.CircleCastAll(transform.position, _radius, direction, distance, _interactiveLayer);
 
-		if (hit2D)
+		if (hits2D.Length > 0)
 		{
-			if (hit2D.transform.gameObject.TryGetComponent(out IInteractive interactive))
+			foreach (RaycastHit2D hit2D in hits2D)
 			{
-				return interactive;
+				if (hit2D.transform.gameObject.TryGetComponent(out IInteractive interactive))
+				{
+					InteractiveObjectInfo interactInfo = new()
+					{
+						Object = interactive
+					};
+
+					bool isEntrance = true;
+
+					for (int i = 0; i < LastInteractiveObjects.Count; i++)
+					{
+						if (LastInteractiveObjects[i] == interactive)
+						{
+							isEntrance = false;
+							break;
+						}
+					}
+
+					interactInfo.IsEntrance = isEntrance;
+
+					objects.Add(interactInfo);
+
+					CurrentInteractiveObjects.Add(interactive);
+				}
 			}
+
+			return objects;
 		}
 
 		return null;

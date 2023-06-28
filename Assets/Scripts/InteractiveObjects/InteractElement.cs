@@ -1,5 +1,9 @@
 public enum InteractElement
 {
 	Touch,
-	Fire
+	Fire,
+	Water,
+	Earth,
+	Air,
+	AnyElement
 }

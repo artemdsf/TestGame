@@ -1,17 +1,21 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+using static InteractiveObject;
 
 public class PlayerMovement : MonoBehaviour
 {
 	[Header("Movement Parameters")]
 	[SerializeField] private float _speed = 5f;
-	[SerializeField] private LayerMask _gapLayer;
-	[SerializeField] private LayerMask _wallLayer;
 	[SerializeField] private LayerMask _interactiveLayer;
+
+	public List<IInteractive> LastInteractiveObjects = new();
+	public List<IInteractive> CurrentInteractiveObjects = new();
 
 	private const string HorizontalAxis = "Horizontal";
 	private const string VerticalAxis = "Vertical";
 
-	private InteractElement _interactElement = InteractElement.Touch;
+	private readonly InteractElement _interactElement = InteractElement.Touch;
 	private float _radius;
 
 	private void Awake()
@@ -22,6 +26,8 @@ public class PlayerMovement : MonoBehaviour
 	private void Update()
 	{
 		ProcessMovement();
+		LastInteractiveObjects = CurrentInteractiveObjects.ToList();
+		CurrentInteractiveObjects.Clear();
 	}
 
 	private void ProcessMovement()
@@ -34,53 +40,83 @@ public class PlayerMovement : MonoBehaviour
 
 	private void MoveInDirection(Vector2 direction)
 	{
-		Vector2 movement = _speed * Time.deltaTime * direction;
+		float distance = _speed * Time.deltaTime;
+		HandleInteractiveCollision(direction, distance, out bool isReflection);
 
-		if (IsObstacleInDirection(direction, movement.magnitude) == false &&
-			CheckAndHandleInteractiveCollision(direction, movement.magnitude) == false)
+		if (isReflection == false)
 		{
-			transform.position += (Vector3)movement;
+			transform.position += (Vector3)(distance * direction);
 		}
 	}
 
-	private bool CheckAndHandleInteractiveCollision(Vector2 direction, float distance)
+	private void HandleInteractiveCollision(Vector2 direction, float distance, out bool isReflection)
 	{
-		IInteractive interactiveObject = GetCollidingInteractiveObject(direction, distance);
+		List<InteractiveObjectInfo> interactiveObjects = GetInfoAboutCollidingObjects(direction, distance);
 
-		if (interactiveObject != null)
+		isReflection = false;
+
+		if (interactiveObjects != null)
 		{
-			InteractType? interactType = interactiveObject.Interact(_interactElement);
-
-			switch (interactType)
+			foreach (InteractiveObjectInfo interactiveObject in interactiveObjects)
 			{
-				case InteractType.Reflection:
-					return true;
+				List<InteractType> interactTypes = interactiveObject.Object.Interact(_interactElement, interactiveObject.IsEntrance);
 
-				case InteractType.Destroy:
-					Debug.LogWarning("Death");
-					break;
+				if (interactTypes.Count > 0)
+				{
+					foreach (InteractType interactType in interactTypes)
+					{
+						switch (interactType)
+						{
+							case InteractType.Destroy:
+								Debug.LogWarning("Death");
+								break;
+
+							case InteractType.Reflection:
+								isReflection = true;
+								break;
+						}
+					}
+				}
 			}
 		}
-
-		return false;
 	}
 
-	private bool IsObstacleInDirection(Vector2 direction, float distance)
+	private List<InteractiveObjectInfo> GetInfoAboutCollidingObjects(Vector2 direction, float distance)
 	{
-		return Physics2D.CircleCast(transform.position, _radius, direction, distance, _gapLayer) ||
-			   Physics2D.CircleCast(transform.position, _radius, direction, distance, _wallLayer);
-	}
+		List<InteractiveObjectInfo> objects = new();
+		RaycastHit2D[] hits2D = Physics2D.CircleCastAll(transform.position, _radius, direction, distance, _interactiveLayer);
 
-	private IInteractive GetCollidingInteractiveObject(Vector2 direction, float distance)
-	{
-		RaycastHit2D hit2D = Physics2D.CircleCast(transform.position, _radius, direction, distance, _interactiveLayer);
-
-		if (hit2D)
+		if (hits2D.Length > 0)
 		{
-			if (hit2D.transform.gameObject.TryGetComponent(out IInteractive interactive))
+			foreach (RaycastHit2D hit2D in hits2D)
 			{
-				return interactive;
+				if (hit2D.transform.gameObject.TryGetComponent(out IInteractive interactive))
+				{
+					InteractiveObjectInfo interactInfo = new()
+					{
+						Object = interactive
+					};
+
+					bool isEntrance = true;
+
+					for (int i = 0; i < LastInteractiveObjects.Count; i++)
+					{
+						if (LastInteractiveObjects[i] == interactive)
+						{
+							isEntrance = false;
+							break;
+						}
+					}
+
+					interactInfo.IsEntrance = isEntrance;
+
+					objects.Add(interactInfo);
+
+					CurrentInteractiveObjects.Add(interactive);
+				}
 			}
+
+			return objects;
 		}
 
 		return null;

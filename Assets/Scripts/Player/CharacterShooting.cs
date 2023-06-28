@@ -5,7 +5,6 @@ public class CharacterShooting : MonoBehaviour
 	[Header("Shooting Parameters")]
 	[SerializeField] private GameObject _projectilePrefab;
 	[SerializeField] private float _projectileSpeed = 10f;
-	[SerializeField] private float _projectileLifetime = 3f;
 
 	private readonly KeyCode _attackKey = KeyCode.Mouse0;
 
@@ -28,7 +27,5 @@ public class CharacterShooting : MonoBehaviour
 
 		projectileScript.InitialDirection = shootingDirection;
 		projectileScript.Speed = _projectileSpeed;
-
-		Destroy(projectile, _projectileLifetime);
 	}
 }
