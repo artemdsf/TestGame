@@ -41,11 +41,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Gap
-    uniqueID: 3212765553
-    locked: 0
   - name: Floor
     uniqueID: 3538241733
+    locked: 0
+  - name: Gap
+    uniqueID: 3212765553
     locked: 0
   - name: Wall
     uniqueID: 3647999043

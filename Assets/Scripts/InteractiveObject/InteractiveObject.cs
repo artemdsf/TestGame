@@ -50,7 +50,7 @@ public class InteractiveObject : MonoBehaviour, IInteractive
 		return interactTypes;
 	}
 
-	private void Awake()
+	protected virtual void Awake()
 	{
 		_animator = GetComponent<Animator>();
 	}

@@ -12,8 +12,9 @@ public class Projectile : MonoBehaviour
 	public List<IInteractive> LastInteractiveObjects = new();
 	public List<IInteractive> CurrentInteractiveObjects = new();
 
+	public InteractElement InteractElement = InteractElement.Fire;
+
 	private GameObject _projectilePrefab;
-	private InteractElement _interactElement = InteractElement.Fire;
 	private Vector2 _currentDirection;
 	private float _radius;
 
@@ -70,7 +71,7 @@ public class Projectile : MonoBehaviour
 		{
 			foreach (InteractiveObjectInfo item in interactiveObjects)
 			{
-				List<InteractType> interactTypes = item.Object.Interact(_interactElement, item.IsEntrance);
+				List<InteractType> interactTypes = item.Object.Interact(InteractElement, item.IsEntrance);
 
 				if (interactTypes.Count > 0)
 				{
@@ -93,22 +94,22 @@ public class Projectile : MonoBehaviour
 
 							case InteractType.ChangeToFire:
 								Debug.Log("Change to fire");
-								_interactElement = InteractElement.Fire;
+								InteractElement = InteractElement.Fire;
 								break;
 
 							case InteractType.ChangeToWater:
 								Debug.Log("Change to water");
-								_interactElement = InteractElement.Water;
+								InteractElement = InteractElement.Water;
 								break;
 
 							case InteractType.ChangeToEarth:
 								Debug.Log("Change to earth");
-								_interactElement = InteractElement.Earth;
+								InteractElement = InteractElement.Earth;
 								break;
 
 							case InteractType.ChangeToAir:
 								Debug.Log("Change to air");
-								_interactElement = InteractElement.Air;
+								InteractElement = InteractElement.Air;
 								break;
 						}
 					}
