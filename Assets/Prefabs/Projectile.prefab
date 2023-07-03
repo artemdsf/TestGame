@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4302143480949637462}
-  - component: {fileID: 4302143480949637461}
   - component: {fileID: 4302143480949637460}
   - component: {fileID: 4302143480949637419}
   m_Layer: 0
@@ -34,58 +33,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &4302143480949637461
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4302143480949637418}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 178398179
-  m_SortingLayer: 4
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!58 &4302143480949637460
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -118,3 +65,13 @@ MonoBehaviour:
   _interactiveLayer:
     serializedVersion: 2
     m_Bits: 576
+  _projectileElements:
+  - Element: 1
+    Prefab: {fileID: 823173658891823263, guid: e5c5e2b69db6f3643ae03ca926783590, type: 3}
+  - Element: 2
+    Prefab: {fileID: 3579945474562748155, guid: 5c8a1fb8ab8f5bd498d8eb87f8473c33, type: 3}
+  - Element: 3
+    Prefab: {fileID: 6714095624934136686, guid: e2932e6becb0b0f42903dbf5bfeda1d8, type: 3}
+  - Element: 4
+    Prefab: {fileID: 6744929784623104620, guid: 4e406c8e70fa9d442b6aec3c4b41af46, type: 3}
+  InteractElement: 1

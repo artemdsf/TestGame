@@ -61,8 +61,6 @@ public class CharacterShooting : MonoBehaviour
 		GameObject projectile = Instantiate(_projectilePrefab, transform.position, Quaternion.identity);
 		Projectile projectileScript = projectile.GetComponent<Projectile>();
 
-		projectileScript.InitialDirection = shootingDirection;
-		projectileScript.Speed = _projectileSpeed;
-		projectileScript.InteractElement = _currentElement;
+		projectileScript.Init(shootingDirection, _projectileSpeed, _currentElement);
 	}
 }

@@ -3,10 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-	[SerializeField] private string _sceneName;
-
-	public void LoadScene()
+	public void LoadNextScene()
 	{
-		SceneManager.LoadScene(_sceneName);
+		int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+		int nextSceneIndex = currentSceneIndex + 1;
+
+		if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings)
+		{
+			nextSceneIndex = 0;
+		}
+
+		SceneManager.LoadScene(nextSceneIndex);
 	}
 }

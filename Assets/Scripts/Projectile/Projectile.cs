@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,27 +6,51 @@ using static InteractiveObject;
 
 public class Projectile : MonoBehaviour
 {
+	[Serializable]
+	public class ProjectileElement
+	{
+		public InteractElement Element;
+		public GameObject Prefab;
+	}
+
 	[Header("Projectile Parameters")]
 	[SerializeField] private float _speed;
 	[SerializeField] private LayerMask _interactiveLayer;
+	[SerializeField] private List<ProjectileElement> _projectileElements;
 
 	public List<IInteractive> LastInteractiveObjects = new();
 	public List<IInteractive> CurrentInteractiveObjects = new();
 
-	public InteractElement InteractElement = InteractElement.Fire;
+	public InteractElement CurrentElement = InteractElement.Fire;
 
+	private GameObject _child;
 	private GameObject _projectilePrefab;
 	private Vector2 _currentDirection;
 	private float _radius;
 
-	public Vector2 InitialDirection
+	public void Init(Vector2 direction, float speed, InteractElement element)
 	{
-		set { _currentDirection = value; }
+		_currentDirection = direction;
+		_speed = speed;
+		ChangeElement(element);
 	}
 
-	public float Speed
+	public void ChangeElement(InteractElement element)
 	{
-		set { _speed = value; }
+		foreach (ProjectileElement item in _projectileElements)
+		{
+			if (item.Element == element)
+			{
+				if (_child != null)
+				{
+					Destroy(_child);
+				}
+
+				_child = Instantiate(item.Prefab, transform);
+			}
+		}
+		
+		CurrentElement = element;
 	}
 
 	private void Awake()
@@ -71,7 +96,7 @@ public class Projectile : MonoBehaviour
 		{
 			foreach (InteractiveObjectInfo item in interactiveObjects)
 			{
-				List<InteractType> interactTypes = item.Object.Interact(InteractElement, item.IsEntrance);
+				List<InteractType> interactTypes = item.Object.Interact(CurrentElement, item.IsEntrance);
 
 				if (interactTypes.Count > 0)
 				{
@@ -93,23 +118,19 @@ public class Projectile : MonoBehaviour
 								break;
 
 							case InteractType.ChangeToFire:
-								Debug.Log("Change to fire");
-								InteractElement = InteractElement.Fire;
+								ChangeElement(InteractElement.Fire);
 								break;
 
 							case InteractType.ChangeToWater:
-								Debug.Log("Change to water");
-								InteractElement = InteractElement.Water;
+								ChangeElement(InteractElement.Water);
 								break;
 
 							case InteractType.ChangeToEarth:
-								Debug.Log("Change to earth");
-								InteractElement = InteractElement.Earth;
+								ChangeElement(InteractElement.Earth);
 								break;
 
 							case InteractType.ChangeToAir:
-								Debug.Log("Change to air");
-								InteractElement = InteractElement.Air;
+								ChangeElement(InteractElement.Air);
 								break;
 						}
 					}
@@ -125,8 +146,7 @@ public class Projectile : MonoBehaviour
 
 		projectileScript.CurrentInteractiveObjects = CurrentInteractiveObjects.ToList();
 		projectileScript.LastInteractiveObjects = CurrentInteractiveObjects.ToList();
-		projectileScript.InitialDirection = _currentDirection;
-		projectileScript.Speed = _speed;
+		projectileScript.Init(_currentDirection, _speed, CurrentElement);
 	}
 
 	private List<InteractiveObjectInfo> GetInfoAboutCollidingObjects(Vector2 direction, float distance)
