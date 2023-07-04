@@ -59,5 +59,17 @@ PrefabInstance:
       propertyPath: _interactElements.Array.data[0].Element
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8019484856606645094, guid: 943908d7c0635bf4cb7d460ba060f8cb, type: 3}
+      propertyPath: _activeColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8019484856606645094, guid: 943908d7c0635bf4cb7d460ba060f8cb, type: 3}
+      propertyPath: _activeColor.r
+      value: 0.084590435
+      objectReference: {fileID: 0}
+    - target: {fileID: 8019484856606645094, guid: 943908d7c0635bf4cb7d460ba060f8cb, type: 3}
+      propertyPath: _interactElements.Array.data[0].Element
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 943908d7c0635bf4cb7d460ba060f8cb, type: 3}

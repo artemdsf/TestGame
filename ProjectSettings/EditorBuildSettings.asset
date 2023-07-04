@@ -29,4 +29,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Chapter2/Level2.2.unity
     guid: c164d82b1901e6e46a6b6dd25a5d674c
+  - enabled: 1
+    path: Assets/Scenes/Chapter2/Level2.3.unity
+    guid: 9618249ce2c594248bdfb27ae707f95b
+  - enabled: 1
+    path: Assets/Scenes/Chapter2/Level2.4.unity
+    guid: b8959fcfc4c5c794a82f492d5f7ecf82
   m_configObjects: {}

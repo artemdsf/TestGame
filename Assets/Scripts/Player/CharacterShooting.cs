@@ -14,18 +14,29 @@ public class CharacterShooting : MonoBehaviour
 	[Header("Shooting Parameters")]
 	[SerializeField] private GameObject _projectilePrefab;
 	[SerializeField] private float _projectileSpeed = 10f;
+	[SerializeField] private float _attackCooldown = 1f;
 	[SerializeField] private List<AttackElement> _attackElements = new();
 
 	public int ElementsUnlocked = 0;
 
 	private readonly KeyCode _attackKey = KeyCode.Mouse0;
 	private InteractElement _currentElement = InteractElement.Fire;
+	private float _currentCooldown;
+
+	private void Awake()
+	{
+		_currentCooldown = _attackCooldown;
+	}
 
 	private void Update()
 	{
-		if (ElementsUnlocked > 0 && Input.GetKeyDown(_attackKey))
+		_currentCooldown += Time.deltaTime;
+
+		if (ElementsUnlocked > 0 && _currentCooldown > _attackCooldown && Input.GetKeyDown(_attackKey))
 		{
 			ShootProjectile();
+
+			_currentCooldown = 0;
 		}
 
 		if (Input.anyKeyDown)
