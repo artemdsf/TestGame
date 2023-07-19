@@ -678,11 +678,12 @@ MonoBehaviour:
     Type: 0
     AnimationTriggerName: Active
     IsInteractionOnlyAtEntrance: 1
-  _activeColor: {r: 1, g: 0, b: 0, a: 1}
-  _disactiveColor: {r: 1, g: 1, b: 1, a: 1}
-  _spriteRenderer: {fileID: 1569084208}
   _gameObjects:
   - {fileID: 40896945}
+  _runes: []
+  _spriteRenderer: {fileID: 1569084208}
+  _activeColor: {r: 1, g: 0, b: 0, a: 1}
+  _disactiveColor: {r: 1, g: 1, b: 1, a: 1}
   _mayBeCanceled: 0
 --- !u!95 &931387050
 Animator:
@@ -2559,11 +2560,12 @@ MonoBehaviour:
     Type: 0
     AnimationTriggerName: Active
     IsInteractionOnlyAtEntrance: 1
-  _activeColor: {r: 1, g: 0, b: 0, a: 1}
-  _disactiveColor: {r: 1, g: 1, b: 1, a: 1}
-  _spriteRenderer: {fileID: 733245811}
   _gameObjects:
   - {fileID: 1284187791}
+  _runes: []
+  _spriteRenderer: {fileID: 733245811}
+  _activeColor: {r: 1, g: 0, b: 0, a: 1}
+  _disactiveColor: {r: 1, g: 1, b: 1, a: 1}
   _mayBeCanceled: 0
 --- !u!1001 &2055918000
 PrefabInstance:

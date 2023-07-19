@@ -468,6 +468,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7447085338768153999, guid: 3b556c624ce76354ba0594eac55561fd, type: 3}
+      propertyPath: _mayBeCanceled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7447085338768153999, guid: 3b556c624ce76354ba0594eac55561fd, type: 3}
       propertyPath: _gameObjects.Array.size
       value: 1
       objectReference: {fileID: 0}
