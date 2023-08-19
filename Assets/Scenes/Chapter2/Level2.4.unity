@@ -1514,6 +1514,26 @@ PrefabInstance:
       propertyPath: ElementsUnlocked
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 343597985, guid: 02807ef1a3b8b274ba4b6f635070f112, type: 3}
+      propertyPath: _attackElements.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 343597985, guid: 02807ef1a3b8b274ba4b6f635070f112, type: 3}
+      propertyPath: _attackElements.Array.data[0].Element
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 343597985, guid: 02807ef1a3b8b274ba4b6f635070f112, type: 3}
+      propertyPath: _attackElements.Array.data[1].Element
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 343597985, guid: 02807ef1a3b8b274ba4b6f635070f112, type: 3}
+      propertyPath: _attackElements.Array.data[0].ProjectilePrefab
+      value: 
+      objectReference: {fileID: 823173658891823263, guid: e5c5e2b69db6f3643ae03ca926783590, type: 3}
+    - target: {fileID: 343597985, guid: 02807ef1a3b8b274ba4b6f635070f112, type: 3}
+      propertyPath: _attackElements.Array.data[1].ProjectilePrefab
+      value: 
+      objectReference: {fileID: 823173658891823263, guid: e5c5e2b69db6f3643ae03ca926783590, type: 3}
     - target: {fileID: 5438171723574168824, guid: 02807ef1a3b8b274ba4b6f635070f112, type: 3}
       propertyPath: m_Name
       value: Player

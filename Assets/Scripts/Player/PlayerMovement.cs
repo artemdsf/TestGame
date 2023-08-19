@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static InteractiveObject;
 
+[RequireComponent(typeof(CharacterShooting))]
 public class PlayerMovement : MonoBehaviour
 {
 	[Header("Movement Parameters")]
@@ -15,11 +16,13 @@ public class PlayerMovement : MonoBehaviour
 	private const string HorizontalAxis = "Horizontal";
 	private const string VerticalAxis = "Vertical";
 
+	private CharacterShooting _characterShooting;
 	private readonly InteractElement _interactElement = InteractElement.Touch;
 	private float _radius;
 
 	private void Awake()
 	{
+		_characterShooting = GetComponent<CharacterShooting>();
 		_radius = transform.localScale.x / 2;
 	}
 
@@ -73,6 +76,22 @@ public class PlayerMovement : MonoBehaviour
 
 							case InteractType.Reflection:
 								isReflection = true;
+								break;
+
+							case InteractType.ChangeToFire:
+								_characterShooting.ChangeElement(InteractElement.Fire);
+								break;
+
+							case InteractType.ChangeToWater:
+								_characterShooting.ChangeElement(InteractElement.Water);
+								break;
+
+							case InteractType.ChangeToEarth:
+								_characterShooting.ChangeElement(InteractElement.Earth);
+								break;
+
+							case InteractType.ChangeToAir:
+								_characterShooting.ChangeElement(InteractElement.Air);
 								break;
 						}
 					}

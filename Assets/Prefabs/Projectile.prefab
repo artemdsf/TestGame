@@ -67,11 +67,11 @@ MonoBehaviour:
     m_Bits: 576
   _projectileElements:
   - Element: 1
-    Prefab: {fileID: 823173658891823263, guid: e5c5e2b69db6f3643ae03ca926783590, type: 3}
+    Prefab: {fileID: 3579945474562748155, guid: f9691c63c68b28242ae4a2e6acb0a7ec, type: 3}
   - Element: 2
     Prefab: {fileID: 3579945474562748155, guid: 5c8a1fb8ab8f5bd498d8eb87f8473c33, type: 3}
   - Element: 3
-    Prefab: {fileID: 6714095624934136686, guid: e2932e6becb0b0f42903dbf5bfeda1d8, type: 3}
+    Prefab: {fileID: 3579945474562748155, guid: d87eaf4cbb9764142a0d772787f8abdd, type: 3}
   - Element: 4
-    Prefab: {fileID: 6744929784623104620, guid: 4e406c8e70fa9d442b6aec3c4b41af46, type: 3}
-  InteractElement: 1
+    Prefab: {fileID: 3579945474562748155, guid: 1d9f0b8c340cf1a4f9d8146ae94281c3, type: 3}
+  CurrentElement: 1

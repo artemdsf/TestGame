@@ -98,13 +98,11 @@ MonoBehaviour:
     Type: 0
     AnimationTriggerName: Active
     IsInteractionOnlyAtEntrance: 1
-  _gameObjects: []
-  _runes: []
-  _spriteRenderer: {fileID: 6803430964387211817}
   _activeColor: {r: 0, g: 0, b: 0, a: 1}
   _disactiveColor: {r: 1, g: 1, b: 1, a: 1}
+  _spriteRenderer: {fileID: 6803430964387211817}
+  _gameObjects: []
   _mayBeCanceled: 0
-  IsPressed: 0
 --- !u!1 &6803430964387211831
 GameObject:
   m_ObjectHideFlags: 0

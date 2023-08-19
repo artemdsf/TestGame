@@ -8,41 +8,33 @@ public class Button : InteractiveObject
 	[SerializeField] private SpriteRenderer _spriteRenderer;
 	[SerializeField] private Color _normalColor;
 	[SerializeField] private Color _pressedColor;
-	[SerializeField] private bool _mayBeCanceled = true;
 
-	public bool IsPressed => _isPressed;
-
-	private bool _isPressed = false;
+	public bool IsPressed = false;
 
 	public void Click()
 	{
-		bool firstActivationCondition = _mayBeCanceled == true || (_mayBeCanceled == false && _isPressed == false);
-
-		if (firstActivationCondition)
+		if (_gameObjects.Count > 0)
 		{
-			if (_gameObjects.Count > 0)
+			foreach (GameObject item in _gameObjects)
 			{
-				foreach (GameObject item in _gameObjects)
-				{
-					item.SetActive(!item.activeInHierarchy);
-				}
+				item.SetActive(IsPressed);
 			}
-
-			if (_buttons.Count > 0)
-			{
-				foreach (Button button in _buttons)
-				{
-					button.ChangeClick();
-				}
-			}
-
-			ChangeClick();
 		}
+
+		if (_buttons.Count > 0)
+		{
+			foreach (Button button in _buttons)
+			{
+				button.ChangeClick();
+			}
+		}
+
+		ChangeClick();
 	}
 
 	public void ChangeClick()
 	{
-		if (_isPressed)
+		if (IsPressed)
 		{
 			_spriteRenderer.color = _normalColor;
 		}
@@ -51,6 +43,6 @@ public class Button : InteractiveObject
 			_spriteRenderer.color = _pressedColor;
 		}
 
-		_isPressed = !_isPressed;
+		IsPressed = !IsPressed;
 	}
 }
